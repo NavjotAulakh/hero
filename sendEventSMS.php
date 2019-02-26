@@ -7,11 +7,9 @@ use Aws\Sns\SnsClient;
 
 // Instantiate the S3 client with your AWS credentials
 $snsClient = SnsClient::factory(array(
-    'credentials' => array(
         'key'    => 'ASIAYZ4HZNCR235B5CXF',
         'secret' => '1tX2UHCCV5ifT1wh3WUkrfoKiCPzhxmdd7O1FQ5x',
         'region'  => 'us-east-1',
-    )
 ));
 
 // You just need to publish it and include the `PhoneNumber` parameter
@@ -22,7 +20,7 @@ $snsClientResult = $snsClient->publish([
     'MessageAttributes' => [
         'AWS.SNS.SMS.SenderID' => [
             'DataType' => 'String',
-            'StringValue' => 'SENDER_ID',
+            'StringValue' => 'Nav',
         ],
         'AWS.SNS.SMS.SMSType' => [
             'DataType' => 'String',
