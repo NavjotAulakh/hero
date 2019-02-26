@@ -2,19 +2,7 @@
 require('vendor/autoload.php');
 // this will simply read AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY from env vars
 // Instantiate the client.
-use Aws\S3\S3Client;
-	use Aws\S3\Exception\S3Exception;
-	// Set Amazon S3 Credentials
-	$s3 = S3Client::factory(
-		array(
-			'credentials' => array(
-				'key' => 'ASIAYZ4HZNCRQZYVMEEY',
-				'secret' => 'l//DO3oZSs5cbcodpEKdrLnX6K0a6n0nkoOMVAOD'
-			),
-			'version' => 'latest',
-			'region'  => 'us-east-1'
-		)
-	);
+$s3 = Aws\S3\S3Client::factory();
 $bucket = getenv('S3_BUCKET')?: die('No "S3_BUCKET" config var in found in env!');
 ?>
 <html>
