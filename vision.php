@@ -3,7 +3,7 @@
 // [START vision_fulltext_detection]
 namespace Google\Cloud\Samples\Vision;
 use Google\Cloud\Vision\V1\ImageAnnotatorClient;
-// $path = 'path/to/your/image.jpg'
+$path = 'doc.jpg'
 function detect_document_text($path)
 {
     $imageAnnotator = new ImageAnnotatorClient();
