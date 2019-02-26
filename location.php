@@ -43,7 +43,7 @@
 	<div id='map-label'>Relative event location</div>
 
 	<!-- JavaScript to show google map -->
-	<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyD64oAZBcNecONu1COO3xZr8tnQtqVmaDc"></script>
+	<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyDyILZl8cDT41AG_0Kxy4l9Eb-WRyf1cnQ"></script>
 	<script type="text/javascript">
 		function init_map() {
 			var myOptions = {
@@ -92,7 +92,7 @@ function geocode($address){
 	$address = urlencode($address);
 	
 	// google map geocode api url
-	$url = "https://maps.google.com/maps/api/geocode/json?address={$address}&key=AIzaSyD64oAZBcNecONu1COO3xZr8tnQtqVmaDc";
+	$url = "https://maps.google.com/maps/api/geocode/json?address={$address}&key=AIzaSyDyILZl8cDT41AG_0Kxy4l9Eb-WRyf1cnQ";
 
 	// get the json response
 	$resp_json = file_get_contents($url);
