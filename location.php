@@ -1,37 +1,129 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+    <title>Search Address on Map</title>
+ 
     <style>
- <span class="metadata-marker" style="display: none;" data-region_tag="css"></span>      /* Set the size of the div element that contains the map */
-      #map {
-        height: 400px;  /* The height is 400 pixels */
-        width: 100%;  /* The width is the width of the web page */
-       }
+    /* some custom css */
+    #gmap_canvas{
+        width:100%;
+        height:30em;
+    }
     </style>
-  </head>
-  <body>
-<span class="metadata-marker" style="display: none;" data-region_tag="html-body"></span>    <h3>My Google Maps Demo</h3>
-    <!--The div element for the map -->
-    <div id="map"></div>
-    <script>
-<span class="metadata-marker" style="display: none;" data-region_tag="script-body"></span>// Initialize and add the map
-function initMap() {
-  // The location of Uluru
-  var uluru = {lat: -25.344, lng: 131.036};
-  // The map, centered at Uluru
-  var map = new google.maps.Map(
-      document.getElementById('map'), {zoom: 4, center: uluru});
-  // The marker, positioned at Uluru
-  var marker = new google.maps.Marker({position: uluru, map: map});
+ 
+</head>
+<body>
+  <form action="" method="post">
+    <input type='text' name='address' placeholder='Enter any address here' />
+    <input type='submit' value='Geocode!' />
+</form>
+<?php 
+// function to geocode address, it will return false if unable to geocode address
+function geocode($address){
+ 
+    // url encode the address
+    $address = urlencode($address);
+     
+    // google map geocode api url
+    $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=YOUR_API_KEY";
+ 
+    // get the json response
+    $resp_json = file_get_contents($url);
+     
+    // decode the json
+    $resp = json_decode($resp_json, true);
+ 
+    // response status will be 'OK', if able to geocode given address 
+    if($resp['status']=='OK'){
+ 
+        // get the important data
+        $lati = isset($resp['results'][0]['geometry']['location']['lat']) ? $resp['results'][0]['geometry']['location']['lat'] : "";
+        $longi = isset($resp['results'][0]['geometry']['location']['lng']) ? $resp['results'][0]['geometry']['location']['lng'] : "";
+        $formatted_address = isset($resp['results'][0]['formatted_address']) ? $resp['results'][0]['formatted_address'] : "";
+         
+        // verify if data is complete
+        if($lati && $longi && $formatted_address){
+         
+            // put the data in the array
+            $data_arr = array();            
+             
+            array_push(
+                $data_arr, 
+                    $lati, 
+                    $longi, 
+                    $formatted_address
+                );
+             
+            return $data_arr;
+             
+        }else{
+            return false;
+        }
+         
+    }
+ 
+    else{
+        echo "<strong>ERROR: {$resp['status']}</strong>";
+        return false;
+    }
 }
+?>
+<?php
+if($_POST){
+ 
+    // get latitude, longitude and formatted address
+    $data_arr = geocode($_POST['address']);
+ 
+    // if able to geocode the address
+    if($data_arr){
+         
+        $latitude = $data_arr[0];
+        $longitude = $data_arr[1];
+        $formatted_address = $data_arr[2];
+                     
+    ?>
+ 
+    <!-- google map will be shown here -->
+    <div id="gmap_canvas">Loading map...</div>
+    <div id='map-label'>Map shows approximate location.</div>
+ 
+    <!-- JavaScript to show google map -->
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyDC6bjwHN4cqoHKHc53z5osHbIDabdTEZs"></script>   
+    <script type="text/javascript">
+        function init_map() {
+            var myOptions = {
+                zoom: 14,
+                center: new google.maps.LatLng(<?php echo $latitude; ?>, <?php echo $longitude; ?>),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById("gmap_canvas"), myOptions);
+            marker = new google.maps.Marker({
+                map: map,
+                position: new google.maps.LatLng(<?php echo $latitude; ?>, <?php echo $longitude; ?>)
+            });
+            infowindow = new google.maps.InfoWindow({
+                content: "<?php echo $formatted_address; ?>"
+            });
+            google.maps.event.addListener(marker, "click", function () {
+                infowindow.open(map, marker);
+            });
+            infowindow.open(map, marker);
+        }
+        google.maps.event.addDomListener(window, 'load', init_map);
     </script>
-    <!--Load the API from the specified URL
-    * The async attribute allows the browser to render the page while the API loads
-    * The key parameter will contain your own API key (which is not needed for this tutorial)
-    * The callback parameter executes the initMap() function
-    -->
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyILZl8cDT41AG_0Kxy4l9Eb-WRyf1cnQ&callback=initMap">
-    </script>
-  </body>
+ 
+    <?php
+ 
+    // if unable to geocode the address
+    }else{
+        echo "No map found.";
+    }
+}
+?>
+</body>
 </html>
