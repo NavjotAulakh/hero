@@ -1,9 +1,8 @@
 <?php
 require('vendor/autoload.php');
 // this will simply read AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY from env vars
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
-$s3 = new S3Client([
+
+$s3 = AWS\S3\S3Client([
     'version' => 'latest',
     'region'  => 'us-east-1'
 ]);
