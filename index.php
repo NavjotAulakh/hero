@@ -7,6 +7,8 @@ $bucket = getenv('S3_BUCKET')?: die('No "S3_BUCKET" config var in found in env!'
 <html>
     <head><meta charset="UTF-8"></head>
     <body>
+	    <div class="jumbotron text-center">
+  
         <h1>Event Prompter</h1>
 		
 		<a href="https://eventprompter.herokuapp.com/index.php">Event SMS</a>
@@ -42,5 +44,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['userfile']) && $_FILES
         <form enctype="multipart/form-data" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
             <input name="userfile" type="file"><input type="submit" value="Upload">
         </form>
+		    
+</div>
     </body>
 </html>
