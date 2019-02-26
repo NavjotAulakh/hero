@@ -11,26 +11,28 @@ $params = array(
     'region' => 'us-east-1', // < your aws from SNS Topic region
     'version' => 'latest'
 );
-$sns = new \Aws\Sns\SnsClient($params);
+$snsClient = new \Aws\Sns\SnsClient($params);
 
-$args = array(
-    "MessageAttributes" => [
-                'AWS.SNS.SMS.SenderID' => [
-                    'DataType' => 'String',
-                    'StringValue' => 'EventPrompter'
-                ],
-                'AWS.SNS.SMS.SMSType' => [
-                    'DataType' => 'String',
-                    'StringValue' => 'Transactional'
-                ]
-            ],
-    "Message" => "Event Message",
-    "PhoneNumber" => "6475334532"
-);
+// You just need to publish it and include the `PhoneNumber` parameter
+$snsClientResult = $snsClient->publish([
+    'Message' => 'Event Message',
+    'PhoneNumber' => '+16475334532',
+    'MessageStructure' => 'SMS',
+    'MessageAttributes' => [
+        'AWS.SNS.SMS.SenderID' => [
+            'DataType' => 'String',
+            'StringValue' => 'SENDER_ID',
+        ],
+        'AWS.SNS.SMS.SMSType' => [
+            'DataType' => 'String',
+            'StringValue' => 'Promotional', // Transactional
+        ]
+    ]
+]);
 
+// Get the response
 
-$result = $sns->publish($args);
 echo "<pre>";
-var_dump($result);
+var_dump($snsClientResult['MessageId']);
 echo "</pre>";
 ?>
