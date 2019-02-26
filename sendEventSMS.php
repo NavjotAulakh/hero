@@ -2,9 +2,17 @@
 require './vendor/autoload.php';
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
-
+use Aws\Sns\SnsClient; 
+use Aws\Exception\AwsException;
 // Instantiate the S3 client with your AWS credentials
-$snsClient = Aws\Sns\SnsClient::factory();
+$snsClient =new SnsClient([
+    'version'     => 'latest',
+    'region'      => 'us-east-1',
+    'credentials' => [
+        'key'    => 'ASIAYZ4HZNCRTCELYS6O',
+        'secret' => 'qsOVHY6zraQhuPdcKXKb5pvN8BHiCogTBdSQYaU1',
+    ],
+]);
 
 // You just need to publish it and include the `PhoneNumber` parameter
 $snsClientResult = $snsClient->publish([
