@@ -9,7 +9,7 @@ $s3 = new Aws\S3\S3Client([
 	    'key'    => "ASIAYZ4HZNCRTCELYS6O",
 	    'secret' => "qsOVHY6zraQhuPdcKXKb5pvN8BHiCogTBdSQYaU1",
 	]
-])
+]);
 $bucket = getenv('S3_BUCKET')?: die('No "S3_BUCKET" config var in found in env!');
 ?>
 <html>
