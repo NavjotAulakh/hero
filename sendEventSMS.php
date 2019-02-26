@@ -2,7 +2,7 @@
 require './vendor/autoload.php';
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
-
+echo "Test";
 use Aws\Sns\SnsClient;
 
 // Instantiate the S3 client with your AWS credentials
