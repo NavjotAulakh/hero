@@ -1,13 +1,7 @@
 <?php
 require './vendor/autoload.php';
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
-use Aws\Sns\SnsClient;
 
-$sns = \Aws\Sns\SnsClient::factory(array(
-    'region' => 'us-east-1',
-    'version'  => 'latest',
-));
+$sns = Aws\Sns\SnsClient::factory();
 
 $result = $sns->publish([
     'Message' => 'Testing event message', // REQUIRED
