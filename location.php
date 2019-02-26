@@ -1,129 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
- 
-    <title>Search Address on Map</title>
- 
-    <style>
-    /* some custom css */
-    #gmap_canvas{
-        width:100%;
-        height:30em;
-    }
-    </style>
- 
-</head>
-<body>
-  <form action="" method="post">
-    <input type='text' name='address' placeholder='Enter any address here' />
-    <input type='submit' value='Search Map' />
-</form>
-<?php 
-// function to geocode address, it will return false if unable to geocode address
-function geocode($address){
- 
-    // url encode the address
-    $address = urlencode($address);
-     
-    // google map geocode api url
-    $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=AIzaSyDyILZl8cDT41AG_0Kxy4l9Eb-WRyf1cnQ";
- 
-    // get the json response
-    $resp_json = file_get_contents($url);
-     
-    // decode the json
-    $resp = json_decode($resp_json, true);
- 
-    // response status will be 'OK', if able to geocode given address 
-    if($resp['status']=='OK'){
- 
-        // get the important data
-        $lati = isset($resp['results'][0]['geometry']['location']['lat']) ? $resp['results'][0]['geometry']['location']['lat'] : "";
-        $longi = isset($resp['results'][0]['geometry']['location']['lng']) ? $resp['results'][0]['geometry']['location']['lng'] : "";
-        $formatted_address = isset($resp['results'][0]['formatted_address']) ? $resp['results'][0]['formatted_address'] : "";
-         
-        // verify if data is complete
-        if($lati && $longi && $formatted_address){
-         
-            // put the data in the array
-            $data_arr = array();            
-             
-            array_push(
-                $data_arr, 
-                    $lati, 
-                    $longi, 
-                    $formatted_address
-                );
-             
-            return $data_arr;
-             
-        }else{
-            return false;
+<html>
+    <head>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    </head>
+    <body>
+        <a href="https://eventprompter.herokuapp.com/index.php">Main Page</a>
+        <p>Address: <div id="address"></div></p>
+    </body>
+    <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+
+        var currgeocoder;
+
+        //Set geo location lat and long
+        navigator.geolocation.getCurrentPosition(function(position, html5Error) {
+            geo_loc = processGeolocationResult(position);
+            currLatLong = geo_loc.split(",");
+            initializeCurrent(currLatLong[0], currLatLong[1]);
+        });
+
+        //Get geo location result
+        function processGeolocationResult(position) {
+            html5Lat = position.coords.latitude; //Get latitude
+            html5Lon = position.coords.longitude; //Get longitude
+            html5TimeStamp = position.timestamp; //Get timestamp
+            html5Accuracy = position.coords.accuracy; //Get accuracy in meters
+            return (html5Lat).toFixed(8) + ", " + (html5Lon).toFixed(8);
         }
-         
-    }
- 
-    else{
-        echo "<strong>ERROR: {$resp['status']}</strong>";
-        return false;
-    }
-}
-?>
-<?php
-if($_POST){
- 
-    // get latitude, longitude and formatted address
-    $data_arr = geocode($_POST['address']);
- 
-    // if able to geocode the address
-    if($data_arr){
-         
-        $latitude = $data_arr[0];
-        $longitude = $data_arr[1];
-        $formatted_address = $data_arr[2];
-                     
-    ?>
- 
-    <!-- google map will be shown here -->
-    <div id="gmap_canvas">Loading map...</div>
-    <div id='map-label'>Map shows approximate location.</div>
- 
-    <!-- JavaScript to show google map -->
-    <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyDyILZl8cDT41AG_0Kxy4l9Eb-WRyf1cnQ"></script>   
-    <script type="text/javascript">
-        function init_map() {
-            var myOptions = {
-                zoom: 14,
-                center: new google.maps.LatLng(<?php echo $latitude; ?>, <?php echo $longitude; ?>),
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            map = new google.maps.Map(document.getElementById("gmap_canvas"), myOptions);
-            marker = new google.maps.Marker({
-                map: map,
-                position: new google.maps.LatLng(<?php echo $latitude; ?>, <?php echo $longitude; ?>)
-            });
-            infowindow = new google.maps.InfoWindow({
-                content: "<?php echo $formatted_address; ?>"
-            });
-            google.maps.event.addListener(marker, "click", function () {
-                infowindow.open(map, marker);
-            });
-            infowindow.open(map, marker);
+
+        //Check value is present or
+        function initializeCurrent(latcurr, longcurr) {
+            currgeocoder = new google.maps.Geocoder();
+
+            console.log(latcurr + "-- ######## --" + longcurr);
+
+            if (latcurr != '' && longcurr != '') {
+                //call google api function
+                var myLatlng = new google.maps.LatLng(latcurr, longcurr);
+                return getCurrentAddress(myLatlng);
+            }
         }
-        google.maps.event.addDomListener(window, 'load', init_map);
+
+        //Get current address
+        function getCurrentAddress(location) {
+            currgeocoder.geocode({
+                'location': location
+            }, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    console.log(results[0]);
+                    $("#address").html(results[0].formatted_address);
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+    });
     </script>
- 
-    <?php
- 
-    // if unable to geocode the address
-    }else{
-        echo "No map found.";
-    }
-}
-?>
-</body>
 </html>
