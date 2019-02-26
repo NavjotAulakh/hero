@@ -6,12 +6,12 @@ use Aws\Sns\SnsClient;
 use Aws\Exception\AwsException;
 // Instantiate the S3 client with your AWS credentials
 $snsClient =new SnsClient([
-    'version'     => 'latest',
-    'region'      => 'us-east-1',
     'credentials' => [
         'key'    => 'ASIAYZ4HZNCRTCELYS6O',
         'secret' => 'qsOVHY6zraQhuPdcKXKb5pvN8BHiCogTBdSQYaU1',
     ],
+    'version'     => 'latest',
+    'region'      => 'us-east-1',
 ]);
 
 // You just need to publish it and include the `PhoneNumber` parameter
