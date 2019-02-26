@@ -3,15 +3,15 @@ require './vendor/autoload.php';
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-$params = array(
+use Aws\Sns\SnsClient;
+
+// Instantiate the S3 client with your AWS credentials
+$snsClient = S3Client::factory(array(
     'credentials' => array(
-        'key' => 'ASIAYZ4HZNCR235B5CXF',
+        'key'    => 'ASIAYZ4HZNCR235B5CXF',
         'secret' => '1tX2UHCCV5ifT1wh3WUkrfoKiCPzhxmdd7O1FQ5x',
-    ),
-    'region' => 'us-east-1', // < your aws from SNS Topic region
-    'version' => 'latest'
-);
-$snsClient = new \Aws\Sns\SnsClient($params);
+    )
+));
 
 // You just need to publish it and include the `PhoneNumber` parameter
 $snsClientResult = $snsClient->publish([
