@@ -6,7 +6,7 @@ echo "Test";
 use Aws\Sns\SnsClient;
 
 // Instantiate the S3 client with your AWS credentials
-$snsClient = S3Client::factory(array(
+$snsClient = SnsClient::factory(array(
     'credentials' => array(
         'key'    => 'ASIAYZ4HZNCR235B5CXF',
         'secret' => '1tX2UHCCV5ifT1wh3WUkrfoKiCPzhxmdd7O1FQ5x',
