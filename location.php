@@ -1,49 +1,85 @@
+
 <!DOCTYPE html>
-<html> 
-<head> 
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
-  <title>Google Maps Multiple Markers</title> 
-  <script src="http://maps.google.com/maps/api/js?sensor=false" 
-          type="text/javascript"></script>
-</head> 
-<body>
-  <div id="map" style="width: 500px; height: 400px;"></div>
-
-  <script type="text/javascript">
-    var locations = [
-      ['Bondi Beach', -33.890542, 151.274856, 4],
-      ['Coogee Beach', -33.923036, 151.259052, 5],
-      ['Cronulla Beach', -34.028249, 151.157507, 3],
-      ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
-      ['Maroubra Beach', -33.950198, 151.259302, 1]
-    ];
-
-    var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 10,
-      center: new google.maps.LatLng(-33.92, 151.25),
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    });
-
-    var infowindow = new google.maps.InfoWindow();
-
-    var marker, i;
-
-    for (i = 0; i < locations.length; i++) {  
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-        map: map
-      });
-
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-          infowindow.setContent(locations[i][0]);
-          infowindow.open(map, marker);
-        }
-      })(marker, i));
+<html lang="en">
+<head>
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+    <title>Live Demo of Google Maps Geocoding Example with PHP</title>
+ 
+    <style>
+    /* some custom css */
+    #gmap_canvas{
+        width:100%;
+        height:30em;
     }
-  </script>
-</body>}
-?>
+    </style>
+ 
+</head>
+<body>
+  <form action="" method="post">
+    <input type='text' name='address' placeholder='Enter your event address here' />
+    <input type='submit' value='Locate' />
+	<div id='address-examples'>
+    <div>Address examples:</div>
+    <div>1. 2000 Simcoe Street North, Oshawa, Ontario</div>
+    <div>or 2. 80 E.Rodriguez Jr. Ave. Libis Quezon City</div>
+	</div>
+<?php 
+// function to geocode address, it will return false if unable to geocode address
+function geocode($address){
+ 
+    // url encode the address
+    $address = urlencode($address);
+     
+    // google map geocode api url
+    $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=AIzaSyDC6bjwHN4cqoHKHc53z5osHbIDabdTEZs";
+ 
+    // get the json response
+    $resp_json = file_get_contents($url);
+     
+    // decode the json
+    $resp = json_decode($resp_json, true);
+ 
+    // response status will be 'OK', if able to geocode given address 
+    if($resp['status']=='OK'){
+ 
+        // get the important data
+        $lati = isset($resp['results'][0]['geometry']['location']['lat']) ? $resp['results'][0]['geometry']['location']['lat'] : "";
+        $longi = isset($resp['results'][0]['geometry']['location']['lng']) ? $resp['results'][0]['geometry']['location']['lng'] : "";
+        $formatted_address = isset($resp['results'][0]['formatted_address']) ? $resp['results'][0]['formatted_address'] : "";
+         
+        // verify if data is complete
+        if($lati && $longi && $formatted_address){
+         
+            // put the data in the array
+            $data_arr = array();            
+             
+            array_push(
+                $data_arr, 
+                    $lati, 
+                    $longi, 
+                    $formatted_address
+                );
+             
+            return $data_arr;
+             
+        }else{
+            return false;
+        }
+         
+    }
+ 
+    else{
+        echo "<strong>ERROR: {$resp['status']}</strong>";
+        return false;
+    }
+}
+?>	
+</form>
+</body>
 <?php
 if($_POST){
  
@@ -64,7 +100,7 @@ if($_POST){
     <div id='map-label'>Map shows approximate location.</div>
  
     <!-- JavaScript to show google map -->
-    <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyDyILZl8cDT41AG_0Kxy4l9Eb-WRyf1cnQ"></script>   
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyDC6bjwHN4cqoHKHc53z5osHbIDabdTEZs"></script>   
     <script type="text/javascript">
         function init_map() {
             var myOptions = {
@@ -96,5 +132,4 @@ if($_POST){
     }
 }
 ?>
-</body>
 </html>
