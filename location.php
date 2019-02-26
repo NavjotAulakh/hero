@@ -20,7 +20,7 @@
 <body>
   <form action="" method="post">
     <input type='text' name='address' placeholder='Enter any address here' />
-    <input type='submit' value='Geocode!' />
+    <input type='submit' value='Search Map' />
 </form>
 <?php 
 // function to geocode address, it will return false if unable to geocode address
