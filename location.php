@@ -41,6 +41,7 @@
     </script>
   </head>
   <body>
+    <a href="https://eventprompter.herokuapp.com/index.php">Event SMS</a>
     <div id="map_canvas"></div>
   </body>
 </html>
