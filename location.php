@@ -30,7 +30,7 @@ function geocode($address){
     $address = urlencode($address);
      
     // google map geocode api url
-    $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=AIzaSyDC6bjwHN4cqoHKHc53z5osHbIDabdTEZs";
+    $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=AIzaSyDyILZl8cDT41AG_0Kxy4l9Eb-WRyf1cnQ";
  
     // get the json response
     $resp_json = file_get_contents($url);
@@ -93,7 +93,7 @@ if($_POST){
     <div id='map-label'>Map shows approximate location.</div>
  
     <!-- JavaScript to show google map -->
-    <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyDC6bjwHN4cqoHKHc53z5osHbIDabdTEZs"></script>   
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyDyILZl8cDT41AG_0Kxy4l9Eb-WRyf1cnQ"></script>   
     <script type="text/javascript">
         function init_map() {
             var myOptions = {
