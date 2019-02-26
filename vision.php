@@ -22,7 +22,7 @@ use Google\Cloud\Vision\V1\ImageAnnotatorClient;
 # instantiates a client
 $imageAnnotator = new ImageAnnotatorClient();
 # the name of the image file to annotate
-$fileName = 'doc.jpg';
+$fileName = '\doc.jpg';
 # prepare the image to be annotated
 $image = file_get_contents($fileName);
 # performs label detection on the image file
