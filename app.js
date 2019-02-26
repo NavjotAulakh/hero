@@ -19,7 +19,7 @@ app.controller("ocrController", function($scope, $http){
 			  },
 			  "features":[
 			    {
-			      "type": "TEXT_DETECTION",
+			      "type": "LABEL_DETECTION",
 			      "maxResults": 1
 			    }
 			  ]
