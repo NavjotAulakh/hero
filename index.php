@@ -1,17 +1,15 @@
 <?php
 require('vendor/autoload.php');
 // this will simply read AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY from env vars
-// Instantiate the client.
 $s3 = Aws\S3\S3Client::factory();
 $bucket = getenv('S3_BUCKET')?: die('No "S3_BUCKET" config var in found in env!');
 ?>
 <html>
     <head><meta charset="UTF-8"></head>
     <body>
-        <h1>Event Prompter - Main Page</h1>
+        <h1>Hello SOFE4630</h1>
 		
-		<a href="https://eventprompter.herokuapp.com/list.php">Event List</a>
-	    	<a href="https://eventprompter.herokuapp.com/sendEventSMS.php">Send SMS Message</a>
+		<a href="https://floating-beyond-79601.herokuapp.com/list.php">Files List</a>
 <?php
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['userfile']) && $_FILES['userfile']['error'] == UPLOAD_ERR_OK && is_uploaded_file($_FILES['userfile']['tmp_name'])) {
     // FIXME: add more validation, e.g. using ext/fileinfo
