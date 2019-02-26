@@ -6,7 +6,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Live Demo of Google Maps Geocoding Example with PHP</title>
+	<title>event Location</title>
 	
 	<style>
 	body{
@@ -57,7 +57,7 @@ if($_POST){
 	<div id='map-label'>Map shows approximate location.</div>
 
 	<!-- JavaScript to show google map -->
-	<script type="text/javascript" src="https://maps.google.com/maps/api/js"></script>    
+	<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyDC6bjwHN4cqoHKHc53z5osHbIDabdTEZs"></script>    
 	<script type="text/javascript">
 		function init_map() {
 			var myOptions = {
@@ -98,8 +98,8 @@ if($_POST){
 
 <!-- enter any address -->
 <form action="" method="post">
-	<input type='text' name='address' placeholder='Enter any address here' />
-	<input type='submit' value='Geocode!' />
+	<input type='text' name='address' placeholder='Enter event address Here' />
+	<input type='submit' value='Locate' />
 </form>
 
 <?php
@@ -111,7 +111,7 @@ function geocode($address){
 	$address = urlencode($address);
 	
 	// google map geocode api url
-	$url = "https://maps.google.com/maps/api/geocode/json?address={$address}";
+	$url = "https://maps.google.com/maps/api/geocode/json?address={$address}&key=AIzaSyDC6bjwHN4cqoHKHc53z5osHbIDabdTEZs";
 
 	// get the json response
 	$resp_json = file_get_contents($url);
