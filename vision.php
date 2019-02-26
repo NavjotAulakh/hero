@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>OCR</title>
+	<title>Event Document Text Analyzer</title>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 </head>
 <body ng-app="ocrApp" ng-controller="ocrController">
-	<canvas id="uploadedPic">
-		
-	</canvas>
+	<canvas id="uploadedPic">  Image Results	</canvas>
 	<p>
 		<input type="file" onchange="angular.element(this).scope().uploadPicture( this)">
 	</p>
