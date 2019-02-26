@@ -38,3 +38,4 @@ if ($labels) {
 }
 # [END vision_quickstart]
 return $labels;
+?>
