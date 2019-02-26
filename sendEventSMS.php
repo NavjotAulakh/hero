@@ -14,3 +14,4 @@ $result = $sdk->publish([
       ]
   ]]);
 print_r( $result );
+?>
