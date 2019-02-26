@@ -13,8 +13,7 @@ $bucket = getenv('S3_BUCKET')?: die('No "S3_BUCKET" config var in found in env!'
 		<a href="https://eventprompter.herokuapp.com/location.php">Files List</a>
 		<a href="https://eventprompter.herokuapp.com/vision.php">Files List</a>
 
-<h1>Current Event Files Added</h1>
-		<h3>S3 Files</h3>
+<h3>Current Event Files Added</h3>
 <?php
 	try {
 		$objects = $s3->getIterator('ListObjects', array(
