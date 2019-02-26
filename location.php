@@ -1,60 +1,100 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
-    </head>
-    <body>
-        <a href="https://eventprompter.herokuapp.com/index.php">Main Page</a>
-        <p>Address: <div id="address"></div></p>
-    </body>
-    <script type="text/javascript" charset="utf-8">
-    $(document).ready(function() {
+<html> 
+<head> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
+  <title>Google Maps Multiple Markers</title> 
+  <script src="http://maps.google.com/maps/api/js?sensor=false" 
+          type="text/javascript"></script>
+</head> 
+<body>
+  <div id="map" style="width: 500px; height: 400px;"></div>
 
-        var currgeocoder;
+  <script type="text/javascript">
+    var locations = [
+      ['Bondi Beach', -33.890542, 151.274856, 4],
+      ['Coogee Beach', -33.923036, 151.259052, 5],
+      ['Cronulla Beach', -34.028249, 151.157507, 3],
+      ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
+      ['Maroubra Beach', -33.950198, 151.259302, 1]
+    ];
 
-        //Set geo location lat and long
-        navigator.geolocation.getCurrentPosition(function(position, html5Error) {
-            geo_loc = processGeolocationResult(position);
-            currLatLong = geo_loc.split(",");
-            initializeCurrent(currLatLong[0], currLatLong[1]);
-        });
-
-        //Get geo location result
-        function processGeolocationResult(position) {
-            html5Lat = position.coords.latitude; //Get latitude
-            html5Lon = position.coords.longitude; //Get longitude
-            html5TimeStamp = position.timestamp; //Get timestamp
-            html5Accuracy = position.coords.accuracy; //Get accuracy in meters
-            return (html5Lat).toFixed(8) + ", " + (html5Lon).toFixed(8);
-        }
-
-        //Check value is present or
-        function initializeCurrent(latcurr, longcurr) {
-            currgeocoder = new google.maps.Geocoder();
-
-            console.log(latcurr + "-- ######## --" + longcurr);
-
-            if (latcurr != '' && longcurr != '') {
-                //call google api function
-                var myLatlng = new google.maps.LatLng(latcurr, longcurr);
-                return getCurrentAddress(myLatlng);
-            }
-        }
-
-        //Get current address
-        function getCurrentAddress(location) {
-            currgeocoder.geocode({
-                'location': location
-            }, function(results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    console.log(results[0]);
-                    $("#address").html(results[0].formatted_address);
-                } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
-                }
-            });
-        }
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 10,
+      center: new google.maps.LatLng(-33.92, 151.25),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
     });
+
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+
+    for (i = 0; i < locations.length; i++) {  
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
+  </script>
+</body>}
+?>
+<?php
+if($_POST){
+ 
+    // get latitude, longitude and formatted address
+    $data_arr = geocode($_POST['address']);
+ 
+    // if able to geocode the address
+    if($data_arr){
+         
+        $latitude = $data_arr[0];
+        $longitude = $data_arr[1];
+        $formatted_address = $data_arr[2];
+                     
+    ?>
+ 
+    <!-- google map will be shown here -->
+    <div id="gmap_canvas">Loading map...</div>
+    <div id='map-label'>Map shows approximate location.</div>
+ 
+    <!-- JavaScript to show google map -->
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyDyILZl8cDT41AG_0Kxy4l9Eb-WRyf1cnQ"></script>   
+    <script type="text/javascript">
+        function init_map() {
+            var myOptions = {
+                zoom: 14,
+                center: new google.maps.LatLng(<?php echo $latitude; ?>, <?php echo $longitude; ?>),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById("gmap_canvas"), myOptions);
+            marker = new google.maps.Marker({
+                map: map,
+                position: new google.maps.LatLng(<?php echo $latitude; ?>, <?php echo $longitude; ?>)
+            });
+            infowindow = new google.maps.InfoWindow({
+                content: "<?php echo $formatted_address; ?>"
+            });
+            google.maps.event.addListener(marker, "click", function () {
+                infowindow.open(map, marker);
+            });
+            infowindow.open(map, marker);
+        }
+        google.maps.event.addDomListener(window, 'load', init_map);
     </script>
+ 
+    <?php
+ 
+    // if unable to geocode the address
+    }else{
+        echo "No map found.";
+    }
+}
+?>
+</body>
 </html>
