@@ -37,7 +37,7 @@
 </head>
 <body>
 
-
+	<a href="https://eventprompter.herokuapp.com/index.php">Event SMS</a>
 	<!-- google map will be shown here -->
 	<div id="gmap_canvas">Generate event map canvas. Please Wait.</div>
 	<div id='map-label'>Relative event location</div>
