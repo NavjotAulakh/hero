@@ -13,7 +13,7 @@ $bucket = getenv('S3_BUCKET')?: die('No "S3_BUCKET" config var in found in env!'
 		
 		<a href="https://eventprompter.herokuapp.com/index.php">Event SMS</a>
 		<a href="https://eventprompter.herokuapp.com/location.php">Event Locater</a>
-		<a href="https://eventprompter.herokuapp.com/vision.php">Location Analyzer</a>
+		<a href="https://eventprompter.herokuapp.com/vision.php">Event Document Analyzer</a>
 
 <h3>Current Event Files Added</h3>
 <?php
